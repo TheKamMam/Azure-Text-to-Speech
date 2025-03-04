@@ -7,14 +7,14 @@ from pydub.playback import play
 import azure.cognitiveservices.speech as speechsdk
 
 AZURE_VOICES = [
-    "en-US-DavisNeural",
-    "en-US-TonyNeural",
-    "en-US-JasonNeural",
-    "en-US-GuyNeural",
-    "en-US-JaneNeural",
-    "en-US-NancyNeural",
-    "en-US-JennyNeural",
-    "en-US-AriaNeural",
+    'en-US-DavisNeural',
+    'en-US-TonyNeural',
+    'en-US-JasonNeural',
+    'en-US-GuyNeural',
+    'en-US-JaneNeural',
+    'en-US-NancyNeural',
+    'en-US-JennyNeural',
+    'en-US-AriaNeural'
 ]
 
 AZURE_VOICE_STYLES = [
@@ -67,9 +67,7 @@ class AzureTextToSpeechRequest:
         self.speech_config = speechsdk.SpeechConfig(subscription=api_key, region=region)
         self.audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
     
-    def speechMessage(self, message: str, voiceStyle: str = "", speed: int = 0) -> bool:
-
-        # TODO: add functionality to pass in voice styles and names, like a constants at the beginning of the script with a bunch of names and styles also style prefixes (ex: (anger) MANGO)
+    def speechMessage(self, message: str, voiceStyle: str = '', speed: int = 0, speedOperator: str = "+") -> bool:
 
         # Get the resulting speech from a systhesied message passed in from parameter and play it.
 
@@ -92,8 +90,8 @@ class AzureTextToSpeechRequest:
         synthesizer = speechsdk.SpeechSynthesizer(speech_config=self.speech_config)
 
         ssml_text = f"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='en-US'> \
-                        <voice name='en-US-DavisNeural'> \
-                            <prosody rate='+{speed}%'> \
+                        <voice name='{random.choice(AZURE_VOICES)}'> \
+                            <prosody rate='{speedOperator}{speed}%'> \
                                 <mstts:express-as style='{voiceStyle}' styledegree='2'> \
                                         {message}。\
                                     </mstts:express-as> \
@@ -120,3 +118,6 @@ class AzureTextToSpeechRequest:
             print("Did you update the subscription info?")
             return False
 
+aud = AzureTextToSpeechRequest(api_key, region)
+while True:
+    aud.speechMessage("i'm jaking it", "random", "0", "+")
